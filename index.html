@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Propuesta de Inversión - Rank N' Roll</title>
+    <title>Modelo Financiero Rank N' Roll</title>
     <style>
         * {
             margin: 0;
@@ -12,1081 +12,1162 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
-            background: #1a1a1a;
-            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
         }
         
-        .slide {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 60px;
-            position: relative;
-            scroll-snap-align: start;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         
-        .slide-container {
-            height: 100vh;
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-        }
-        
-        .slide-purple {
+        .header {
             background: linear-gradient(135deg, #6b277a 0%, #521e60 100%);
             color: white;
+            padding: 30px;
+            text-align: center;
         }
         
-        .slide-green {
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6b277a;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #c8ed3e;
+            color: #521e60;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, #6b277a 0%, #8b3a8f 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(107, 39, 122, 0.3);
+        }
+        
+        .card.green {
             background: linear-gradient(135deg, #c8ed3e 0%, #a8cd2e 100%);
             color: #2d3748;
         }
         
-        .slide-white {
-            background: white;
-            color: #2d3748;
+        .card.blue {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
         }
         
-        .flame-bg {
-            position: absolute;
-            opacity: 0.05;
-            width: 600px;
-            height: 600px;
-            right: -100px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-        
-        .slide-number {
-            position: absolute;
-            bottom: 30px;
-            right: 40px;
-            font-size: 0.9em;
-            opacity: 0.6;
-        }
-        
-        .logo-corner {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            font-weight: 900;
-            font-size: 1.2em;
-            letter-spacing: -1px;
-        }
-        
-        h1 {
-            font-size: 4em;
-            font-weight: 900;
-            margin-bottom: 20px;
-            text-align: center;
-            line-height: 1.1;
-        }
-        
-        h2 {
-            font-size: 2.5em;
-            font-weight: 800;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        
-        .subtitle {
-            font-size: 1.5em;
-            text-align: center;
-            margin-bottom: 20px;
-            opacity: 0.9;
-        }
-        
-        .highlight-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid #c8ed3e;
-            margin: 20px 0;
-            backdrop-filter: blur(10px);
-        }
-        
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 40px 0;
-        }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
+        .card.orange {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
         }
         
         .card-title {
             font-size: 0.9em;
-            color: #6b277a;
+            opacity: 0.9;
             margin-bottom: 10px;
-            font-weight: 600;
+            font-weight: 500;
         }
         
         .card-value {
-            font-size: 2.5em;
-            font-weight: 900;
-            color: #2d3748;
-            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
         
         .card-subtitle {
-            font-size: 0.9em;
-            color: #666;
-        }
-        
-        .timeline {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1200px;
-            margin: 40px 0;
-            position: relative;
-        }
-        
-        .timeline-item {
-            flex: 1;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .timeline-dot {
-            width: 60px;
-            height: 60px;
-            background: #c8ed3e;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            box-shadow: 0 5px 15px rgba(200, 237, 62, 0.4);
-        }
-        
-        .timeline-title {
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        
-        .timeline-desc {
-            font-size: 0.9em;
+            font-size: 0.85em;
             opacity: 0.8;
         }
         
         table {
             width: 100%;
-            max-width: 1200px;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.95em;
         }
         
         th {
             background: #6b277a;
             color: white;
-            padding: 15px;
+            padding: 12px;
             text-align: left;
             font-weight: 600;
         }
         
         td {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            color: #2d3748;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
         }
         
-        tr:last-child td {
-            border-bottom: none;
+        tr:hover {
+            background: #f7fafc;
         }
         
-        .stat-large {
-            font-size: 5em;
-            font-weight: 900;
-            margin: 20px 0;
-            text-align: center;
+        .positive {
+            color: #38a169;
+            font-weight: 600;
         }
         
-        .cta-button {
-            background: #c8ed3e;
-            color: #2d3748;
-            padding: 20px 50px;
-            border-radius: 50px;
-            font-size: 1.3em;
+        .negative {
+            color: #e53e3e;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: #fef5e7;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #6b277a;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c8ed3e;
+        }
+        
+        .scenario-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .scenario {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #6b277a;
+        }
+        
+        .scenario.realistic {
+            border-left-color: #c8ed3e;
+        }
+        
+        .scenario.optimistic {
+            border-left-color: #4299e1;
+        }
+        
+        .scenario h3 {
+            color: #6b277a;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-data {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .scenario-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .scenario-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .scenario-value {
             font-weight: 700;
-            border: none;
-            cursor: pointer;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(200, 237, 62, 0.3);
-            transition: all 0.3s;
+            color: #2d3748;
         }
         
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(200, 237, 62, 0.5);
+        .note {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
         }
         
-        .nav-dots {
-            position: fixed;
-            right: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1000;
+        .note-title {
+            font-weight: 700;
+            color: #234e52;
+            margin-bottom: 5px;
         }
         
-        .nav-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            margin: 15px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .nav-dot.active {
-            background: #c8ed3e;
-            transform: scale(1.5);
+        .note-text {
+            color: #2c7a7b;
+            font-size: 0.95em;
         }
         
         @media print {
-            .slide {
-                page-break-after: always;
+            body {
+                background: white;
+                padding: 0;
             }
-            .nav-dots {
+            .tabs {
                 display: none;
+            }
+            .tab-content {
+                display: block !important;
+                page-break-after: always;
             }
         }
     </style>
 </head>
 <body>
-    <div class="slide-container" id="slideContainer">
-        
-        <!-- SLIDE 1: PORTADA -->
-        <div class="slide slide-purple">
-            <svg class="flame-bg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor" d="M100,20 Q120,40 120,70 Q120,90 100,110 Q80,90 80,70 Q80,40 100,20 Z M90,50 Q90,30 100,20 Q110,30 110,50 Q110,70 100,90 Q90,70 90,50 Z" opacity="0.3"/>
-            </svg>
-            
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
-            
-            <h1>PROPUESTA DE<br/>INVERSIÓN</h1>
-            <div class="subtitle">Rank N' Roll - Agencia B2B Performance Marketing</div>
-            
-            <div class="highlight-box" style="margin-top: 40px;">
-                <h2 style="font-size: 2em; margin-bottom: 10px;">$4,600 USD</h2>
-                <p style="font-size: 1.2em;">Capital de Crecimiento | ROI: 18.75% en 15 meses</p>
-            </div>
-            
-            <p style="margin-top: 40px; font-size: 1.1em; opacity: 0.8;">Presentado por: Andrés Felipe Albornoz</p>
-            <p style="opacity: 0.6;">Octubre 2025</p>
-            
-            <div class="slide-number">1 / 15</div>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 MODELO FINANCIERO: PRÉSTAMO MARIO</h1>
+            <p>Rank N' Roll | Proyección 15 Meses | Octubre 2025</p>
         </div>
         
-        <!-- SLIDE 2: EL DESAFÍO -->
-        <div class="slide slide-white">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #6b277a;">El Desafío: Escalar Sin Capital</h2>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-icon">⭐</div>
-                    <div class="card-title">CLIENTE PROBADO</div>
-                    <div class="card-value">$2,416</div>
-                    <div class="card-subtitle">CognosOnline paga/mes<br/>309% growth en oportunidades</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">🛠️</div>
-                    <div class="card-title">SIN HERRAMIENTAS</div>
-                    <div class="card-value">$600-850</div>
-                    <div class="card-subtitle">Por mes necesarios<br/>LinkedIn, CRM, Cold Email</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">🌐</div>
-                    <div class="card-title">SIN RED</div>
-                    <div class="card-value">0</div>
-                    <div class="card-subtitle">Contactos en el mercado<br/>Necesito sistematizar</div>
-                </div>
-            </div>
-            
-            <div class="slide-number" style="color: #6b277a;">2 / 15</div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('resumen')">📊 Resumen Ejecutivo</button>
+            <button class="tab" onclick="showTab('mensual')">📅 Proyección Mensual</button>
+            <button class="tab" onclick="showTab('escenarios')">🎯 Escenarios</button>
+            <button class="tab" onclick="showTab('mario')">💰 Retorno Mario</button>
         </div>
         
-        <!-- SLIDE 3: LA OPORTUNIDAD -->
-        <div class="slide slide-purple">
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
+        <!-- TAB 1: RESUMEN EJECUTIVO -->
+        <div id="resumen" class="tab-content active">
+            <h2 class="section-title">Resumen de la Inversión</h2>
             
-            <h2>El Mercado: Tech B2B en Colombia</h2>
-            
-            <div class="cards-container">
+            <div class="summary-cards">
                 <div class="card">
-                    <div class="card-icon">📈</div>
-                    <div class="card-title">MERCADO TECH</div>
-                    <div class="card-value">$11B</div>
-                    <div class="card-subtitle">Creciendo 27% anual<br/>Menos saturado que México</div>
+                    <div class="card-title">Préstamo Solicitado</div>
+                    <div class="card-value">$6.6M COP</div>
+                    <div class="card-subtitle">$1,650 USD para herramientas B2B</div>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">👥</div>
-                    <div class="card-title">TALENT POOL</div>
-                    <div class="card-value">165K</div>
-                    <div class="card-subtitle">Profesionales tech<br/>Ecosistema en expansión</div>
+                <div class="card green">
+                    <div class="card-title">Retorno Total Mario</div>
+                    <div class="card-value">$7.83M COP</div>
+                    <div class="card-subtitle">ROI: 18.75% en 15 meses</div>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">💰</div>
-                    <div class="card-title">TICKET MENSUAL</div>
-                    <div class="card-value">$1.5-2.4K</div>
-                    <div class="card-subtitle">Por cliente empresarial<br/>Contratos 18-24 meses</div>
+                <div class="card blue">
+                    <div class="card-title">Meta MRR (6 meses)</div>
+                    <div class="card-value">$7,200</div>
+                    <div class="card-subtitle">4 clientes × $1,800/mes</div>
+                </div>
+                
+                <div class="card orange">
+                    <div class="card-title">Pago Mensual</div>
+                    <div class="card-value">$82,500 COP</div>
+                    <div class="card-subtitle">Solo intereses (meses 4-15)</div>
                 </div>
             </div>
             
-            <p style="margin-top: 40px; font-size: 1.2em; text-align: center; opacity: 0.9;">
-                🎯 Cultura de relaciones favorece lealtad una vez establecida
-            </p>
-            
-            <div class="slide-number">3 / 15</div>
-        </div>
-        
-        <!-- SLIDE 4: TRACK RECORD -->
-        <div class="slide slide-green">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #2d3748;">Caso de Éxito Comprobado</h2>
-            
-            <div class="highlight-box" style="background: rgba(107, 39, 122, 0.1); border-left-color: #6b277a;">
-                <h1 style="font-size: 2.5em; color: #6b277a; margin-bottom: 20px;">CognosOnline</h1>
-                <p style="font-size: 1.2em; color: #2d3748;">Empresa EdTech líder en LATAM</p>
-            </div>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-icon">🚀</div>
-                    <div class="card-title">CRECIMIENTO</div>
-                    <div class="card-value" style="color: #6b277a;">309%</div>
-                    <div class="card-subtitle">En oportunidades de negocio<br/>2022-2024</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">💵</div>
-                    <div class="card-title">PIPELINE ANUAL</div>
-                    <div class="card-value" style="color: #6b277a;">$1.6M</div>
-                    <div class="card-subtitle">Valor generado<br/>USD anuales</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">🌎</div>
-                    <div class="card-title">PRESENCIA</div>
-                    <div class="card-value" style="color: #6b277a;">5</div>
-                    <div class="card-subtitle">Países LATAM<br/>MX, CO, PE, CL, AR</div>
+            <div class="note">
+                <div class="note-title">📌 Estructura del Préstamo</div>
+                <div class="note-text">
+                    <strong>Monto:</strong> $6,600,000 COP ($1,650 USD) | 
+                    <strong>Tasa:</strong> 15% anual | 
+                    <strong>Plazo:</strong> 15 meses | 
+                    <strong>Gracia:</strong> 3 meses sin pagos | 
+                    <strong>Pago Final:</strong> $7,834,500 COP en mes 15
                 </div>
             </div>
             
-            <p style="margin-top: 30px; font-size: 1.1em; text-align: center; color: #2d3748; font-style: italic;">
-                "Una estrategia SEO bien ejecutada transforma visibilidad y revenue" - Andrés Albornoz
-            </p>
-            
-            <div class="slide-number" style="color: #2d3748;">4 / 15</div>
-        </div>
-        
-        <!-- SLIDE 5: USO DE FONDOS -->
-        <div class="slide slide-white">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #6b277a;">Inversión $4,600: Stack Tecnológico B2B</h2>
+            <h2 class="section-title">Calendario de Pagos a Mario</h2>
             
             <table>
                 <thead>
                     <tr>
-                        <th>Fase</th>
-                        <th>Herramientas</th>
+                        <th>Período</th>
+                        <th>Descripción</th>
+                        <th>Pago Mensual</th>
+                        <th>Acumulado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Meses 1-3</strong></td>
+                        <td>Período de Gracia (Setup y lanzamiento)</td>
+                        <td class="positive">$0</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Meses 4-15</strong></td>
+                        <td>Pago de intereses mensuales (12 meses)</td>
+                        <td class="negative">$57.50</td>
+                        <td>$690</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 15</strong></td>
+                        <td>Intereses acumulados período gracia</td>
+                        <td class="negative">$172.50</td>
+                        <td>$862.50</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Mes 15</strong></td>
+                        <td>PAGO FINAL: Capital + Intereses totales</td>
+                        <td class="negative">$5,462.50</td>
+                        <td><strong>$5,462.50</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2 class="section-title">Distribución de la Inversión</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Herramienta/Servicio</th>
                         <th>Costo Mensual</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="background: #f7fafc;">
-                        <td><strong>FASE 1<br/>(Mes 1-2)</strong></td>
-                        <td>
-                            • LinkedIn Sales Navigator Core: $79<br/>
-                            • Instantly.ai Cold Email: $77<br/>
-                            • Pipedrive CRM: $28<br/>
-                            • Hunter.io: $49<br/>
-                            • Waalaxy LinkedIn Auto: $70<br/>
-                            • Google Workspace: $24<br/>
-                            • Dominios + Setup: $150 one-time
-                        </td>
-                        <td style="font-weight: 700; color: #6b277a;">$600/mes</td>
-                        <td style="font-weight: 700; color: #6b277a;">$1,200</td>
-                    </tr>
-                    <tr>
-                        <td><strong>FASE 2<br/>(Mes 3-6)</strong></td>
-                        <td>
-                            • Upgrade Sales Navigator Advanced: $135<br/>
-                            • Dripify Pro (cloud-based): $79<br/>
-                            • Pipedrive Professional: $98<br/>
-                            • Apollo.io Pro: $49<br/>
-                            • PandaDoc Business: $49<br/>
-                            • ZeroBounce: $18<br/>
-                            • Herramientas complementarias
-                        </td>
-                        <td style="font-weight: 700; color: #6b277a;">$850/mes</td>
-                        <td style="font-weight: 700; color: #6b277a;">$3,400</td>
-                    </tr>
-                    <tr style="background: #c8ed3e;">
-                        <td colspan="3" style="font-weight: 900; font-size: 1.1em;">TOTAL INVERSIÓN 6 MESES</td>
-                        <td style="font-weight: 900; font-size: 1.3em; color: #2d3748;">$4,600</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <p style="margin-top: 30px; text-align: center; color: #6b277a; font-weight: 600; font-size: 1.1em;">
-                ✅ 100% en herramientas de adquisición | 0% en gastos personales
-            </p>
-            
-            <div class="slide-number" style="color: #6b277a;">5 / 15</div>
-        </div>
-        
-        <!-- SLIDE 6: ESTRUCTURA DEL PRÉSTAMO -->
-        <div class="slide slide-purple">
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
-            
-            <h2>Términos del Préstamo: Simple y Transparente</h2>
-            
-            <div class="highlight-box" style="text-align: center; font-size: 1.3em; margin-bottom: 50px;">
-                <p style="margin-bottom: 15px;">MONTO: <strong style="font-size: 1.5em;">$4,600 USD</strong></p>
-                <p style="margin-bottom: 15px;">TASA: <strong style="font-size: 1.5em;">15% anual</strong></p>
-                <p>PLAZO: <strong style="font-size: 1.5em;">15 meses</strong></p>
-            </div>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot">🎯</div>
-                    <div class="timeline-title">MESES 1-3</div>
-                    <div class="timeline-desc">Período de Gracia<br/><strong>$0 pagos</strong><br/>Setup y lanzamiento</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-dot">📅</div>
-                    <div class="timeline-title">MESES 4-15</div>
-                    <div class="timeline-desc">Pago de Intereses<br/><strong>$57.50/mes</strong><br/>12 pagos mensuales</div>
-                </div>
-                
-                <div class="timeline-item">
-                    <div class="timeline-dot">💰</div>
-                    <div class="timeline-title">MES 15</div>
-                    <div class="timeline-desc">Pago Final<br/><strong>$5,462.50</strong><br/>Capital + Intereses</div>
-                </div>
-            </div>
-            
-            <div class="stat-large" style="color: #c8ed3e; margin-top: 50px;">$5,462.50</div>
-            <p style="text-align: center; font-size: 1.2em; opacity: 0.9;">Total a pagar en 15 meses</p>
-            
-            <div class="slide-number">6 / 15</div>
-        </div>
-        
-        <!-- SLIDE 7: RETORNO PARA MARIO -->
-        <div class="slide slide-green">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #2d3748;">Tu Retorno: 18.75% en 15 Meses</h2>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-icon">💵</div>
-                    <div class="card-title">TU INVERSIÓN</div>
-                    <div class="card-value" style="color: #6b277a;">$4,600</div>
-                    <div class="card-subtitle">Capital prestado<br/>Mes 1</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">📈</div>
-                    <div class="card-title">TU GANANCIA</div>
-                    <div class="card-value" style="color: #38a169;">$862.50</div>
-                    <div class="card-subtitle">Profit neto<br/>ROI: 18.75%</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">⚖️</div>
-                    <div class="card-title">VS ALTERNATIVAS</div>
-                    <div class="card-value" style="color: #6b277a;">+56%</div>
-                    <div class="card-subtitle">CDT: 12% = $552<br/>Prima por riesgo</div>
-                </div>
-            </div>
-            
-            <table style="margin-top: 40px;">
-                <thead>
-                    <tr>
-                        <th>Opción</th>
-                        <th>Plazo</th>
-                        <th>Retorno</th>
-                        <th>Ganancia</th>
+                        <th>Costo 6 Meses</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>CDT Colombia</td>
-                        <td>12 meses</td>
-                        <td>12%</td>
-                        <td>$552</td>
+                        <td><strong>Prospecting</strong></td>
+                        <td>LinkedIn Sales Navigator Core → Advanced</td>
+                        <td>$79 → $135</td>
+                        <td>$630</td>
                     </tr>
                     <tr>
-                        <td>Fondo S&P500</td>
-                        <td>15 meses</td>
-                        <td>10%</td>
-                        <td>$575</td>
+                        <td><strong>Cold Email</strong></td>
+                        <td>Instantly.ai Hypergrowth</td>
+                        <td>$77</td>
+                        <td>$462</td>
                     </tr>
-                    <tr style="background: #c8ed3e;">
-                        <td><strong>Préstamo Rank N' Roll</strong></td>
-                        <td><strong>15 meses</strong></td>
-                        <td><strong>18.75%</strong></td>
-                        <td><strong>$862.50</strong></td>
+                    <tr>
+                        <td><strong>Email Finding</strong></td>
+                        <td>Hunter.io / Apollo.io</td>
+                        <td>$49</td>
+                        <td>$294</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LinkedIn Automation</strong></td>
+                        <td>Waalaxy → Dripify Pro</td>
+                        <td>$70 → $79</td>
+                        <td>$447</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CRM</strong></td>
+                        <td>Pipedrive Essential → Professional</td>
+                        <td>$28 → $98</td>
+                        <td>$378</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Proposals</strong></td>
+                        <td>PandaDoc Essentials → Business</td>
+                        <td>$19 → $49</td>
+                        <td>$204</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email Infrastructure</strong></td>
+                        <td>Google Workspace + Dominios + Warmup</td>
+                        <td>$24 + setup</td>
+                        <td>$294</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email Verification</strong></td>
+                        <td>ZeroBounce</td>
+                        <td>$18</td>
+                        <td>$108</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Setup One-Time</strong></td>
+                        <td>Dominios (5) + Configuración técnica</td>
+                        <td>-</td>
+                        <td>$150</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SEO Actual</strong></td>
+                        <td>Ranki (ya cubierto - $200/año)</td>
+                        <td>$17</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contingencia</strong></td>
+                        <td>Buffer para imprevistos</td>
+                        <td>-</td>
+                        <td>$633</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td colspan="3"><strong>TOTAL INVERSIÓN 6 MESES</strong></td>
+                        <td><strong>$4,600</strong></td>
                     </tr>
                 </tbody>
             </table>
-            
-            <div class="slide-number" style="color: #2d3748;">7 / 15</div>
         </div>
         
-        <!-- SLIDE 8: ROADMAP 90 DÍAS -->
-        <div class="slide slide-purple">
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
+        <!-- TAB 2: PROYECCIÓN MENSUAL -->
+        <div id="mensual" class="tab-content">
+            <h2 class="section-title">Proyección Mes a Mes: Escenario Realista</h2>
             
-            <h2>Roadmap 90 Días: De Setup a Primer Cliente</h2>
-            
-            <div class="timeline" style="flex-direction: column; gap: 30px;">
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot">1️⃣</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left;">MES 1: FOUNDATION</div>
-                        <div class="timeline-desc" style="text-align: left;">Setup herramientas • Warmup dominios • Build lista 500 empresas • Research ICP</div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot">2️⃣</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left;">MES 2: CAMPAIGN LAUNCH</div>
-                        <div class="timeline-desc" style="text-align: left;">100 emails/día • 25 LinkedIn/día • Primeras conversaciones • Refinar messaging</div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot">3️⃣</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left;">MES 3: CONVERSIÓN</div>
-                        <div class="timeline-desc" style="text-align: left;">10-20 discovery calls • 3-5 propuestas • PRIMER CLIENTE CIERRA 🎉</div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot">4️⃣</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left;">MES 4-6: SCALE</div>
-                        <div class="timeline-desc" style="text-align: left;">150-200 emails/día • 2-3 clientes adicionales • Pipeline robusto $20K+</div>
-                    </div>
+            <div class="note">
+                <div class="note-title">📈 Supuestos Base</div>
+                <div class="note-text">
+                    Cliente 1 cierra mes 3 ($1,800/mes) | Cliente 2 mes 5 ($1,800/mes) | Cliente 3 mes 6 ($1,800/mes) | Cliente 4 mes 8 ($1,800/mes)
                 </div>
             </div>
-            
-            <div class="slide-number">8 / 15</div>
-        </div>
-        
-        <!-- SLIDE 9: ESCENARIOS FINANCIEROS -->
-        <div class="slide slide-white">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #6b277a;">Escenarios: Conservador vs Realista vs Optimista</h2>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Escenario</th>
-                        <th>Clientes</th>
-                        <th>MRR</th>
-                        <th>Timeline</th>
-                        <th>Probabilidad</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>CONSERVADOR</strong></td>
-                        <td>3 × $1,500</td>
-                        <td style="color: #6b277a; font-weight: 700;">$4,500</td>
-                        <td>6 meses</td>
-                        <td style="color: #38a169; font-weight: 700;">80%</td>
-                    </tr>
-                    <tr style="background: #c8ed3e;">
-                        <td><strong>REALISTA (BASE)</strong></td>
-                        <td>4 × $1,800</td>
-                        <td style="color: #2d3748; font-weight: 700;">$7,200</td>
-                        <td>6 meses</td>
-                        <td style="color: #2d3748; font-weight: 700;">60%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>OPTIMISTA</strong></td>
-                        <td>5 × $1,800</td>
-                        <td style="color: #6b277a; font-weight: 700;">$9,000</td>
-                        <td>5 meses</td>
-                        <td style="color: #ed8936; font-weight: 700;">35%</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div style="margin-top: 50px; text-align: center;">
-                <p style="font-size: 1.2em; color: #6b277a; margin-bottom: 20px;"><strong>Basado en:</strong></p>
-                <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
-                    <div>✅ Benchmarks 120+ empresas B2B</div>
-                    <div>✅ Mi track record CognosOnline</div>
-                    <div>✅ Datos de 70,000+ campañas LinkedIn</div>
-                </div>
-            </div>
-            
-            <div class="slide-number" style="color: #6b277a;">9 / 15</div>
-        </div>
-        
-        <!-- SLIDE 10: CASH FLOW -->
-        <div class="slide slide-purple">
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
-            
-            <h2>Proyección Cash Flow: Escenario Realista</h2>
             
             <table>
                 <thead>
                     <tr>
                         <th>Mes</th>
                         <th>Clientes</th>
-                        <th>Ingresos</th>
+                        <th>Ingresos MRR</th>
                         <th>Pago Mario</th>
-                        <th>Tools</th>
-                        <th>Cash Flow</th>
+                        <th>Herramientas</th>
+                        <th>Ahorro Mes 15</th>
+                        <th>Cash Flow Neto</th>
+                        <th>Acumulado</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1-3</td>
+                        <td><strong>Mes 1</strong></td>
                         <td>0</td>
                         <td>$0</td>
-                        <td style="color: #c8ed3e;">$0</td>
-                        <td>-$600</td>
-                        <td style="color: #fc8181;">-$1,800</td>
+                        <td class="positive">$0</td>
+                        <td class="negative">-$600</td>
+                        <td>$0</td>
+                        <td class="negative">-$600</td>
+                        <td class="negative">-$600</td>
                     </tr>
-                    <tr style="background: rgba(200, 237, 62, 0.1);">
-                        <td>4</td>
+                    <tr>
+                        <td><strong>Mes 2</strong></td>
+                        <td>0</td>
+                        <td>$0</td>
+                        <td class="positive">$0</td>
+                        <td class="negative">-$600</td>
+                        <td>$0</td>
+                        <td class="negative">-$600</td>
+                        <td class="negative">-$1,200</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 3</strong></td>
+                        <td>0 → 1</td>
+                        <td>$0</td>
+                        <td class="positive">$0</td>
+                        <td class="negative">-$600</td>
+                        <td>$0</td>
+                        <td class="negative">-$600</td>
+                        <td class="negative">-$1,800</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Mes 4</strong></td>
                         <td>1</td>
-                        <td>$1,800</td>
-                        <td>-$57.50</td>
-                        <td>-$700</td>
-                        <td style="color: #c8ed3e;">+$1,042</td>
+                        <td class="positive">$1,800</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$700</td>
+                        <td>$0</td>
+                        <td class="positive">+$1,042.50</td>
+                        <td class="negative">-$757.50</td>
                     </tr>
                     <tr>
-                        <td>5</td>
-                        <td>2</td>
-                        <td>$1,800</td>
-                        <td>-$57.50</td>
-                        <td>-$700</td>
-                        <td style="color: #c8ed3e;">+$582</td>
+                        <td><strong>Mes 5</strong></td>
+                        <td>1 → 2</td>
+                        <td class="positive">$1,800</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$700</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$582.50</td>
+                        <td class="negative">-$175</td>
                     </tr>
-                    <tr style="background: rgba(200, 237, 62, 0.1);">
-                        <td>6</td>
+                    <tr class="highlight">
+                        <td><strong>Mes 6</strong></td>
+                        <td>2 → 3</td>
+                        <td class="positive">$3,600</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$2,232.50</td>
+                        <td class="positive">+$2,057.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 7</strong></td>
                         <td>3</td>
-                        <td>$3,600</td>
-                        <td>-$57.50</td>
-                        <td>-$850</td>
-                        <td style="color: #c8ed3e;">+$2,232</td>
+                        <td class="positive">$5,400</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$4,032.50</td>
+                        <td class="positive">+$6,090</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Mes 8</strong></td>
+                        <td>3 → 4</td>
+                        <td class="positive">$5,400</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$4,032.50</td>
+                        <td class="positive">+$10,122.50</td>
                     </tr>
                     <tr>
-                        <td>7-8</td>
+                        <td><strong>Mes 9</strong></td>
                         <td>4</td>
-                        <td>$7,200</td>
-                        <td>-$57.50</td>
-                        <td>-$850</td>
-                        <td style="color: #c8ed3e;">+$5,832</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$5,832.50</td>
+                        <td class="positive">+$15,955</td>
                     </tr>
-                    <tr style="background: rgba(200, 237, 62, 0.2);">
-                        <td>15</td>
+                    <tr>
+                        <td><strong>Mes 10</strong></td>
                         <td>4</td>
-                        <td>$7,200</td>
-                        <td style="font-weight: 900;">-$5,462</td>
-                        <td>-$850</td>
-                        <td style="color: #c8ed3e; font-weight: 900;">+$888</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$5,832.50</td>
+                        <td class="positive">+$21,787.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 11</strong></td>
+                        <td>4</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$5,832.50</td>
+                        <td class="positive">+$27,620</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 12</strong></td>
+                        <td>4</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$5,832.50</td>
+                        <td class="positive">+$33,452.50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 13</strong></td>
+                        <td>4</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$5,832.50</td>
+                        <td class="positive">+$39,285</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mes 14</strong></td>
+                        <td>4</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$57.50</td>
+                        <td class="negative">-$850</td>
+                        <td class="negative">-$460</td>
+                        <td class="positive">+$5,832.50</td>
+                        <td class="positive">+$45,117.50</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Mes 15</strong></td>
+                        <td>4</td>
+                        <td class="positive">$7,200</td>
+                        <td class="negative">-$5,462.50</td>
+                        <td class="negative">-$850</td>
+                        <td>$0</td>
+                        <td class="positive">+$887.50</td>
+                        <td class="positive">+$46,005</td>
+                    </tr>
+                    <tr style="background: #c8ed3e;">
+                        <td colspan="2"><strong>TOTALES</strong></td>
+                        <td class="positive"><strong>$75,600</strong></td>
+                        <td class="negative"><strong>-$5,462.50</strong></td>
+                        <td class="negative"><strong>-$11,850</strong></td>
+                        <td class="negative"><strong>-$5,060</strong></td>
+                        <td class="positive"><strong>+$53,227.50</strong></td>
+                        <td class="positive"><strong>+$46,005</strong></td>
                     </tr>
                 </tbody>
             </table>
             
-            <p style="margin-top: 30px; text-align: center; font-size: 1.2em;">
-                ✅ Ahorro acumulado mes 5-15: <strong style="color: #c8ed3e;">$5,060</strong> (cubre pago final)
-            </p>
-            
-            <div class="slide-number">10 / 15</div>
-        </div>
-        
-        <!-- SLIDE 11: MITIGACIÓN DE RIESGOS -->
-        <div class="slide slide-green">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #2d3748;">¿Qué Pasa Si...? Plan de Contingencia</h2>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-icon">⏰</div>
-                    <div class="card-title">ESCENARIO 1</div>
-                    <div class="card-value" style="font-size: 1.8em; color: #6b277a;">Tardo más</div>
-                    <div class="card-subtitle" style="margin-top: 15px;">
-                        <strong>Si cierro clientes después de 6 meses:</strong><br/>
-                        • Extensión 3 meses pre-negociada<br/>
-                        • Costo: +$172.50 intereses<br/>
-                        • Sin penalidades adicionales
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">💳</div>
-                    <div class="card-title">ESCENARIO 2</div>
-                    <div class="card-value" style="font-size: 1.8em; color: #6b277a;">Sin liquidez</div>
-                    <div class="card-subtitle" style="margin-top: 15px;">
-                        <strong>Si no tengo $5,462 en mes 15:</strong><br/>
-                        • Pago parcial + refinanciación saldo<br/>
-                        • O conversión a comisión 3%<br/>
-                        • Si hay clientes activos
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">🤝</div>
-                    <div class="card-title">ESCENARIO 3</div>
-                    <div class="card-value" style="font-size: 1.8em; color: #6b277a;">Problemas</div>
-                    <div class="card-subtitle" style="margin-top: 15px;">
-                        <strong>Si las cosas van muy mal:</strong><br/>
-                        • Reunión de buena fe<br/>
-                        • Sin acciones legales inmediatas<br/>
-                        • Reestructuración amigable
-                    </div>
+            <div class="note">
+                <div class="note-title">✅ Análisis del Cash Flow</div>
+                <div class="note-text">
+                    <strong>Punto de equilibrio:</strong> Mes 6 (cash flow acumulado positivo) | 
+                    <strong>Ahorro acumulado para pago final:</strong> $5,060 (suficiente para cubrir $5,462.50 con cash flow mes 15) | 
+                    <strong>Capital disponible mes 15:</strong> $46,005 después de pagar a Mario
                 </div>
             </div>
-            
-            <p style="margin-top: 40px; text-align: center; font-size: 1.2em; color: #2d3748;">
-                🛡️ <strong>Tu inversión protegida con cláusulas flexibles y comunicación transparente</strong>
-            </p>
-            
-            <div class="slide-number" style="color: #2d3748;">11 / 15</div>
         </div>
         
-        <!-- SLIDE 12: TRANSPARENCIA -->
-        <div class="slide slide-white">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
+        <!-- TAB 3: ESCENARIOS -->
+        <div id="escenarios" class="tab-content">
+            <h2 class="section-title">Comparación de Escenarios</h2>
             
-            <h2 style="color: #6b277a;">Reportes Mensuales: 100% Transparente</h2>
-            
-            <div class="highlight-box" style="background: #f7fafc; border-left-color: #6b277a; color: #2d3748;">
-                <h3 style="color: #6b277a; margin-bottom: 20px; font-size: 1.5em;">📊 DASHBOARD MENSUAL</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 1.1em;">
-                    <div>✅ # Outreach realizados (emails + LinkedIn)</div>
-                    <div>✅ # Conversaciones y reuniones</div>
-                    <div>✅ # Propuestas enviadas</div>
-                    <div>✅ Pipeline de oportunidades ($)</div>
-                    <div>✅ Ingresos cerrados (MRR)</div>
-                    <div>✅ Estado de pago (intereses)</div>
-                </div>
-            </div>
-            
-            <div class="cards-container" style="margin-top: 40px;">
-                <div class="card">
-                    <div class="card-icon">📧</div>
-                    <div class="card-title">EMAIL MENSUAL</div>
-                    <div class="card-subtitle">Dashboard automático<br/>con todas las métricas<br/>el día 5 de cada mes</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">👀</div>
-                    <div class="card-title">ACCESO CRM</div>
-                    <div class="card-subtitle">View-only a Pipedrive<br/>Ver pipeline en tiempo real<br/>24/7 cuando quieras</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-icon">☎️</div>
-                    <div class="card-title">CALL MENSUAL</div>
-                    <div class="card-subtitle">Reunión 15min opcional<br/>Para resolver dudas<br/>y ver progreso</div>
-                </div>
-            </div>
-            
-            <div class="slide-number" style="color: #6b277a;">12 / 15</div>
-        </div>
-        
-        <!-- SLIDE 13: POR QUÉ FUNCIONA -->
-        <div class="slide slide-purple">
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
-            
-            <h2>3 Razones Para Creer en Este Plan</h2>
-            
-            <div class="cards-container">
-                <div class="card">
-                    <div class="card-icon">🏆</div>
-                    <div class="card-title">TRACK RECORD COMPROBADO</div>
-                    <div class="card-value" style="font-size: 2em; color: #6b277a;">309%</div>
-                    <div class="card-subtitle">
-                        • CognosOnline: 309% growth<br/>
-                        • Canal Institucional: 50% más tráfico<br/>
-                        • 2 clientes pagaron $1,200-2,400/mes<br/>
-                        • Casos documentados con métricas
+            <div class="scenario-container">
+                <div class="scenario">
+                    <h3>📊 Conservador (80% probabilidad)</h3>
+                    <div class="scenario-data">
+                        <div class="scenario-row">
+                            <span class="scenario-label">Clientes objetivo:</span>
+                            <span class="scenario-value">3 clientes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Ticket promedio:</span>
+                            <span class="scenario-value">$1,500/mes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">MRR alcanzado:</span>
+                            <span class="scenario-value">$4,500</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Timeline:</span>
+                            <span class="scenario-value">6 meses</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Pago mes 15:</span>
+                            <span class="scenario-value positive">✅ Cubierto</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Cash flow mes 15:</span>
+                            <span class="scenario-value">$23,440</span>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">📈</div>
-                    <div class="card-title">MERCADO EN CRECIMIENTO</div>
-                    <div class="card-value" style="font-size: 2em; color: #6b277a;">27%</div>
-                    <div class="card-subtitle">
-                        • Tech Colombia: 27% anual<br/>
-                        • $11B market size<br/>
-                        • Menos competencia que México<br/>
-                        • Cultura favorece lealtad
+                <div class="scenario realistic">
+                    <h3>🎯 Realista (60% probabilidad)</h3>
+                    <div class="scenario-data">
+                        <div class="scenario-row">
+                            <span class="scenario-label">Clientes objetivo:</span>
+                            <span class="scenario-value">4 clientes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Ticket promedio:</span>
+                            <span class="scenario-value">$1,800/mes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">MRR alcanzado:</span>
+                            <span class="scenario-value">$7,200</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Timeline:</span>
+                            <span class="scenario-value">6 meses</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Pago mes 15:</span>
+                            <span class="scenario-value positive">✅ Cubierto</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Cash flow mes 15:</span>
+                            <span class="scenario-value">$46,005</span>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="card">
-                    <div class="card-icon">✅</div>
-                    <div class="card-title">SISTEMA PROBADO</div>
-                    <div class="card-value" style="font-size: 2em; color: #6b277a;">120+</div>
-                    <div class="card-subtitle">
-                        • Basado en datos 120+ empresas B2B<br/>
-                        • LinkedIn + Email: 287% más engagement<br/>
-                        • CAC $600-1,200, LTV $27-36K<br/>
-                        • Proceso documentado paso a paso
-                    </div>
-                </div>
-            </div>
-            
-            <div class="slide-number">13 / 15</div>
-        </div>
-        
-        <!-- SLIDE 14: PRÓXIMOS PASOS -->
-        <div class="slide slide-green">
-            <div class="logo-corner" style="color: #6b277a;">🔥 RANK N' ROLL</div>
-            
-            <h2 style="color: #2d3748;">Hagamos Esto Realidad</h2>
-            
-            <div class="timeline" style="flex-direction: column; gap: 40px;">
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot" style="background: #6b277a; color: white; font-weight: 900;">3</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left; color: #2d3748;">DESEMBOLSO Y ARRANQUE</div>
-                        <div class="timeline-desc" style="text-align: left; color: #2d3748;">
-                            • Transferencia $4,600 USD<br/>
-                            • Setup herramientas semana 1<br/>
-                            • <strong>Launch campañas semana 3</strong>
+                <div class="scenario optimistic">
+                    <h3>🚀 Optimista (35% probabilidad)</h3>
+                    <div class="scenario-data">
+                        <div class="scenario-row">
+                            <span class="scenario-label">Clientes objetivo:</span>
+                            <span class="scenario-value">5 clientes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Ticket promedio:</span>
+                            <span class="scenario-value">$1,800/mes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">MRR alcanzado:</span>
+                            <span class="scenario-value">$9,000</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Timeline:</span>
+                            <span class="scenario-value">5 meses</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Pago mes 15:</span>
+                            <span class="scenario-value positive">✅ Cubierto</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Cash flow mes 15:</span>
+                            <span class="scenario-value">$68,570</span>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div style="margin-top: 50px; text-align: center;">
-                <button class="cta-button" style="cursor: pointer;">¿Listo para 18.75% ROI?</button>
-            </div>
+            <h2 class="section-title">Análisis de Sensibilidad: ¿Qué pasa si...?</h2>
             
-            <div class="slide-number" style="color: #2d3748;">14 / 15</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Escenario</th>
+                        <th>Variables</th>
+                        <th>MRR Mes 6</th>
+                        <th>¿Puede pagar mes 15?</th>
+                        <th>Acción requerida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Peor caso</strong></td>
+                        <td>Solo 2 clientes × $1,500</td>
+                        <td>$3,000</td>
+                        <td class="negative">⚠️ Ajustado</td>
+                        <td>Extensión 3 meses O pago parcial</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retraso moderado</strong></td>
+                        <td>3 clientes pero en mes 8</td>
+                        <td>$4,500</td>
+                        <td class="positive">✅ Sí</td>
+                        <td>Usar cash flow mes 13-15</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Base case</strong></td>
+                        <td>4 clientes × $1,800 en mes 6</td>
+                        <td>$7,200</td>
+                        <td class="positive">✅ Sí</td>
+                        <td>Ninguna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cliente grande</strong></td>
+                        <td>1 cliente × $2,400 + 2 × $1,800</td>
+                        <td>$6,000</td>
+                        <td class="positive">✅ Sí</td>
+                        <td>Ninguna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Acelerado</strong></td>
+                        <td>5 clientes × $1,800 en mes 5</td>
+                        <td>$9,000</td>
+                        <td class="positive">✅✅ Sí</td>
+                        <td>Considerar prepago</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="note">
+                <div class="note-title">🛡️ Plan de Contingencia</div>
+                <div class="note-text">
+                    <strong>Si no tengo liquidez en mes 15:</strong> 
+                    Opción 1: Extensión 3 meses (+$172.50 intereses) | 
+                    Opción 2: Pago parcial + refinanciación saldo | 
+                    Opción 3: Conversión a comisión 3% si hay clientes activos
+                </div>
+            </div>
         </div>
         
-        <!-- SLIDE 15: CIERRE -->
-        <div class="slide slide-purple">
-            <div class="logo-corner" style="color: #c8ed3e;">🔥 RANK N' ROLL</div>
+        <!-- TAB 4: RETORNO MARIO -->
+        <div id="mario" class="tab-content">
+            <h2 class="section-title">Análisis Completo del Retorno para Mario</h2>
             
-            <h1 style="margin-bottom: 40px;">Gracias, Mario</h1>
-            
-            <div class="highlight-box" style="font-size: 1.2em; line-height: 1.8; max-width: 900px;">
-                <p style="margin-bottom: 30px;">
-                    Esta inversión no solo me ayuda a escalar <strong style="color: #c8ed3e;">Rank N' Roll</strong>, 
-                    sino que te da un <strong style="color: #c8ed3e;">retorno sólido</strong> mientras minimizamos 
-                    riesgos con <strong style="color: #c8ed3e;">transparencia total</strong>.
-                </p>
+            <div class="summary-cards">
+                <div class="card">
+                    <div class="card-title">Inversión Inicial</div>
+                    <div class="card-value">$4,600</div>
+                    <div class="card-subtitle">Capital prestado a Rank N' Roll</div>
+                </div>
                 
-                <p style="font-style: italic; font-size: 1.1em; opacity: 0.9;">
-                    "El éxito se construye con confianza, capital inteligente y ejecución disciplinada."
-                </p>
+                <div class="card green">
+                    <div class="card-title">Retorno Total</div>
+                    <div class="card-value">$5,462.50</div>
+                    <div class="card-subtitle">Capital + Intereses (15% anual)</div>
+                </div>
+                
+                <div class="card blue">
+                    <div class="card-title">Ganancia Neta</div>
+                    <div class="card-value">$862.50</div>
+                    <div class="card-subtitle">Profit después de recuperar capital</div>
+                </div>
+                
+                <div class="card orange">
+                    <div class="card-title">ROI</div>
+                    <div class="card-value">18.75%</div>
+                    <div class="card-subtitle">En 15 meses (15% anualizado)</div>
+                </div>
             </div>
             
-            <div style="margin-top: 60px; text-align: center;">
-                <div class="stat-large" style="font-size: 3em; color: #c8ed3e;">🔥</div>
-                <p style="font-size: 1.8em; font-weight: 700; margin-bottom: 10px;">RANK N' ROLL</p>
-                <p style="font-size: 1.2em; opacity: 0.9;">Performance Marketing B2B</p>
+            <h2 class="section-title">Comparación con Alternativas de Inversión</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Opción de Inversión</th>
+                        <th>Monto</th>
+                        <th>Plazo</th>
+                        <th>Retorno</th>
+                        <th>Ganancia</th>
+                        <th>Riesgo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CDT Colombia 2025</strong></td>
+                        <td>$4,600</td>
+                        <td>12 meses</td>
+                        <td>~12% anual</td>
+                        <td>$552</td>
+                        <td>🟢 Muy bajo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fondo S&P500</strong></td>
+                        <td>$4,600</td>
+                        <td>15 meses</td>
+                        <td>~10% anual</td>
+                        <td>$575</td>
+                        <td>🟡 Medio</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bonos corporativos</strong></td>
+                        <td>$4,600</td>
+                        <td>15 meses</td>
+                        <td>~13% anual</td>
+                        <td>$747.50</td>
+                        <td>🟡 Medio</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Préstamo Rank N' Roll</strong></td>
+                        <td>$4,600</td>
+                        <td>15 meses</td>
+                        <td>18.75%</td>
+                        <td class="positive">$862.50</td>
+                        <td>🟠 Medio-Alto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Préstamo personal promedio</strong></td>
+                        <td>$4,600</td>
+                        <td>15 meses</td>
+                        <td>20-25%</td>
+                        <td>$1,150+</td>
+                        <td>🔴 Alto</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="note">
+                <div class="note-title">📊 Prima por Riesgo</div>
+                <div class="note-text">
+                    Vs CDT sin riesgo (12%): +56% de retorno adicional ($310 más) | 
+                    Vs S&P500 (10%): +87% de retorno adicional ($287 más) | 
+                    <strong>Conclusión:</strong> Excelente balance riesgo/retorno con transparencia mensual
+                </div>
             </div>
             
-            <div style="margin-top: 50px; font-size: 1.1em; opacity: 0.9;">
-                <p><strong>Contacto:</strong> andres@ranknroll.co</p>
-                <p style="margin-top: 10px;"><strong>Web:</strong> ranknroll.co</p>
-                <p style="margin-top: 20px; font-size: 1.3em;">Hablemos pronto 🚀</p>
+            <h2 class="section-title">Flujo de Pagos a Mario (Calendario)</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Mes</th>
+                        <th>Concepto</th>
+                        <th>Monto</th>
+                        <th>Acumulado Recibido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Nov 2025</td>
+                        <td>1</td>
+                        <td>Desembolso préstamo</td>
+                        <td class="negative">-$4,600</td>
+                        <td class="negative">-$4,600</td>
+                    </tr>
+                    <tr>
+                        <td>Dic 2025 - Ene 2026</td>
+                        <td>2-3</td>
+                        <td>Período de gracia (sin pagos)</td>
+                        <td>$0</td>
+                        <td class="negative">-$4,600</td>
+                    </tr>
+                    <tr>
+                        <td>Feb 2026</td>
+                        <td>4</td>
+                        <td>Primer pago de intereses</td>
+                        <td class="positive">+$57.50</td>
+                        <td class="negative">-$4,542.50</td>
+                    </tr>
+                    <tr>
+                        <td>Mar - May 2026</td>
+                        <td>5-7</td>
+                        <td>Pago mensual intereses (×3)</td>
+                        <td class="positive">+$172.50</td>
+                        <td class="negative">-$4,370</td>
+                    </tr>
+                    <tr>
+                        <td>Jun - Ago 2026</td>
+                        <td>8-10</td>
+                        <td>Pago mensual intereses (×3)</td>
+                        <td class="positive">+$172.50</td>
+                        <td class="negative">-$4,197.50</td>
+                    </tr>
+                    <tr>
+                        <td>Sep - Nov 2026</td>
+                        <td>11-13</td>
+                        <td>Pago mensual intereses (×3)</td>
+                        <td class="positive">+$172.50</td>
+                        <td class="negative">-$4,025</td>
+                    </tr>
+                    <tr>
+                        <td>Dic 2026 - Ene 2027</td>
+                        <td>14-15</td>
+                        <td>Últimos 2 pagos intereses</td>
+                        <td class="positive">+$115</td>
+                        <td class="negative">-$3,910</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>Ene 2027</strong></td>
+                        <td><strong>15</strong></td>
+                        <td><strong>PAGO FINAL (Capital + Intereses totales)</strong></td>
+                        <td class="positive"><strong>+$5,462.50</strong></td>
+                        <td class="positive"><strong>+$862.50</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2 class="section-title">Escenarios de Retorno para Mario</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Escenario Rank N' Roll</th>
+                        <th>Probabilidad</th>
+                        <th>¿Recibe pago mes 15?</th>
+                        <th>Retorno Mario</th>
+                        <th>ROI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Éxito total</strong> (4+ clientes)</td>
+                        <td>60%</td>
+                        <td class="positive">✅ Completo</td>
+                        <td>$5,462.50</td>
+                        <td>18.75%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Éxito moderado</strong> (2-3 clientes)</td>
+                        <td>30%</td>
+                        <td class="positive">✅ Con extensión</td>
+                        <td>$5,635 (mes 18)</td>
+                        <td>17.5%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dificultad</strong> (1 cliente)</td>
+                        <td>8%</td>
+                        <td class="negative">⚠️ Parcial</td>
+                        <td>$3,000-4,000</td>
+                        <td>-35% a -13%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fracaso total</strong> (0 clientes)</td>
+                        <td>2%</td>
+                        <td class="negative">❌ No</td>
+                        <td>$0-$500</td>
+                        <td>-89% a -100%</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td colspan="2"><strong>RETORNO ESPERADO PONDERADO</strong></td>
+                        <td colspan="2" class="positive"><strong>$5,200</strong></td>
+                        <td class="positive"><strong>13.04%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="note">
+                <div class="note-title">🎲 Análisis de Riesgo</div>
+                <div class="note-text">
+                    <strong>Probabilidad de recuperar capital completo:</strong> 90% (éxito total + moderado) | 
+                    <strong>Retorno esperado ajustado por riesgo:</strong> 13.04% (vs 12% CDT) | 
+                    <strong>Mitigantes:</strong> Track record probado, dashboard mensual, cláusulas de reestructuración
+                </div>
             </div>
             
-            <div class="slide-number">15 / 15</div>
+            <h2 class="section-title">Ventajas para Mario vs Otras Opciones</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Factor</th>
+                        <th>CDT Bancario</th>
+                        <th>Préstamo a Amigo sin Control</th>
+                        <th>Préstamo Rank N' Roll</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Transparencia</strong></td>
+                        <td>🟡 Solo estado de cuenta</td>
+                        <td>🔴 Nula - "confía en mí"</td>
+                        <td class="positive">🟢 Dashboard mensual + reuniones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control</strong></td>
+                        <td>🔴 Ninguno</td>
+                        <td>🔴 Ninguno</td>
+                        <td class="positive">🟢 View-only CRM + reportes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retorno</strong></td>
+                        <td>🟡 12% fijo</td>
+                        <td>🟡 15-20% pero incierto</td>
+                        <td class="positive">🟢 18.75% con visibilidad</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flexibilidad</strong></td>
+                        <td>🔴 Penalidad por retiro</td>
+                        <td>🟡 Negociable pero incómodo</td>
+                        <td class="positive">🟢 Cláusulas pre-negociadas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Relación</strong></td>
+                        <td>🟢 No afecta amistad</td>
+                        <td>🔴 Alto riesgo relacional</td>
+                        <td class="positive">🟢 Profesional + amistosa</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Track record</strong></td>
+                        <td>🟢 Banco establecido</td>
+                        <td>🔴 Promesas sin pruebas</td>
+                        <td class="positive">🟢 Caso CognosOnline validado</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2 class="section-title">Garantías y Protecciones para Mario</h2>
+            
+            <div class="scenario-container">
+                <div class="scenario">
+                    <h3>📋 Transparencia Total</h3>
+                    <div class="scenario-data">
+                        <div class="scenario-row">
+                            <span class="scenario-label">Dashboard mensual automático</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Acceso view-only a Pipedrive CRM</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Reunión 15min mensual (opcional)</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Notificación de cada cliente cerrado</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scenario realistic">
+                    <h3>🛡️ Cláusulas Protección</h3>
+                    <div class="scenario-data">
+                        <div class="scenario-row">
+                            <span class="scenario-label">Prepago sin penalidad permitido</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Extensión 3 meses pre-aprobada</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Conversión a comisión como alternativa</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Reestructuración de buena fe antes de legal</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scenario optimistic">
+                    <h3>✅ Validación Previa</h3>
+                    <div class="scenario-data">
+                        <div class="scenario-row">
+                            <span class="scenario-label">Track record: CognosOnline (309% growth)</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Cliente activo pagando $2,416/mes</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Metodología basada en 120+ empresas B2B</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Marca establecida: ranknroll.co</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="note" style="background: #fff5f5; border-left-color: #fc8181;">
+                <div class="note-title" style="color: #742a2a;">⚠️ Consideración Importante para Mario</div>
+                <div class="note-text" style="color: #c53030;">
+                    <strong>Este es un préstamo a negocio en crecimiento, no inversión sin riesgo.</strong><br>
+                    Riesgo principal: Rank N' Roll no cierra suficientes clientes en 6 meses.<br>
+                    Mitigación: Track record probado + transparencia total + período gracia para validar tracción antes de pagos.<br>
+                    <strong>Recomendación:</strong> Solo invierte si puedes permitirte el riesgo de $4,600 y valoras la transparencia del proceso.
+                </div>
+            </div>
         </div>
-        
     </div>
     
-    <!-- Navigation Dots -->
-    <div class="nav-dots" id="navDots"></div>
-    
     <script>
-        // Smooth scroll functionality
-        const slideContainer = document.getElementById('slideContainer');
-        const slides = document.querySelectorAll('.slide');
-        const navDotsContainer = document.getElementById('navDots');
-        
-        // Create navigation dots
-        slides.forEach((slide, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'nav-dot';
-            if (index === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => {
-                slides[index].scrollIntoView({ behavior: 'smooth' });
-            });
-            navDotsContainer.appendChild(dot);
-        });
-        
-        // Update active dot on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const index = Array.from(slides).indexOf(entry.target);
-                    document.querySelectorAll('.nav-dot').forEach((dot, i) => {
-                        dot.classList.toggle('active', i === index);
-                    });
-                }
-            });
-        }, { threshold: 0.5 });
-        
-        slides.forEach(slide => observer.observe(slide));
-        
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            const currentSlide = Array.from(slides).findIndex(slide => {
-                const rect = slide.getBoundingClientRect();
-                return rect.top >= 0 && rect.top < window.innerHeight / 2;
-            });
+        function showTab(tabName) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
             
-            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-                e.preventDefault();
-                if (currentSlide < slides.length - 1) {
-                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
-                }
-            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-                e.preventDefault();
-                if (currentSlide > 0) {
-                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
-                }
-            } else if (e.key === 'Home') {
-                e.preventDefault();
-                slides[0].scrollIntoView({ behavior: 'smooth' });
-            } else if (e.key === 'End') {
-                e.preventDefault();
-                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-        
-        // Print functionality
-        window.addEventListener('beforeprint', () => {
-            slideContainer.style.overflow = 'visible';
-            slideContainer.style.height = 'auto';
-        });
-        
-        window.addEventListener('afterprint', () => {
-            slideContainer.style.overflow = 'scroll';
-            slideContainer.style.height = '100vh';
-        });
-        
-        // Touch swipe for mobile
-        let touchStartY = 0;
-        let touchEndY = 0;
-        
-        slideContainer.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        });
-        
-        slideContainer.addEventListener('touchend', (e) => {
-            touchEndY = e.changedTouches[0].clientY;
-            handleSwipe();
-        });
-        
-        function handleSwipe() {
-            const currentSlide = Array.from(slides).findIndex(slide => {
-                const rect = slide.getBoundingClientRect();
-                return rect.top >= 0 && rect.top < window.innerHeight / 2;
-            });
+            // Desactivar todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
             
-            if (touchStartY - touchEndY > 50 && currentSlide < slides.length - 1) {
-                slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
-            } else if (touchEndY - touchStartY > 50 && currentSlide > 0) {
-                slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
-            }
+            // Mostrar contenido seleccionado
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activar tab seleccionado
+            event.target.classList.add('active');
         }
         
-        // Animate cards on scroll
-        const cards = document.querySelectorAll('.card');
-        const cardObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }, index * 100);
+        // Efecto hover en filas de tabla
+        document.querySelectorAll('table tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f7fafc';
+            });
+            row.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('highlight')) {
+                    this.style.backgroundColor = '';
                 }
             });
-        }, { threshold: 0.1 });
-        
-        cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'all 0.5s ease';
-            cardObserver.observe(card);
         });
     </script>
 </body>
-</html>1</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left; color: #2d3748;">REVISIÓN DE TÉRMINOS</div>
-                        <div class="timeline-desc" style="text-align: left; color: #2d3748;">
-                            • Lees esta propuesta completa<br/>
-                            • Call 30min para resolver dudas<br/>
-                            • <strong>Timeline: Esta semana</strong>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot" style="background: #6b277a; color: white; font-weight: 900;">2</div>
-                    <div>
-                        <div class="timeline-title" style="text-align: left; color: #2d3748;">FIRMA DE CONTRATO</div>
-                        <div class="timeline-desc" style="text-align: left; color: #2d3748;">
-                            • Contrato simple de préstamo<br/>
-                            • Firmas digitales (DocuSign/PandaDoc)<br/>
-                            • <strong>Timeline: 3-5 días</strong>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="timeline-item" style="display: flex; align-items: center; gap: 30px; text-align: left;">
-                    <div class="timeline-dot" style="background: #6b277a; color: white; font-weight: 900;">
+</html>
